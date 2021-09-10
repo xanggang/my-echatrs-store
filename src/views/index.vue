@@ -1,7 +1,7 @@
 <template>
   <div class='main-container'>
     <div class='left'>
-      <JsonForm></JsonForm>
+      <Form></Form>
     </div>
     <div class='right'>
       <Echarts title='121212'/>
@@ -12,7 +12,7 @@
 // import Echarts from '../components/Echarts.vue'
 import Echarts from '@/components/Echarts.vue'
 
-import JsonForm from '../components/JsonForm/index.vue'
+import Form from '../components/JsonForm/index.vue'
 </script>
 
 <style lang='less' scoped>

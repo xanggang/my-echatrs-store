@@ -1,25 +1,35 @@
 <template>
-  <div class='container'>
-    <Test></Test>
+  <div class='jf-container'>
+    <OptionsTree />
+    <FormContent :data="JSON" v-model='form'></FormContent>
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
-import JSON from '../../../data/dist/mock.json'
-import Test from './ttt.tsx'
+import { defineComponent, provide } from 'vue'
+import JSON from '../../../data/dist/formMock.json'
+import FormContent from './Form.tsx'
+import OptionsTree from './OptionsTree.vue'
+
+import JsonFormDataModel from './data'
 
 export default defineComponent({
-  name: 'Home',
-  components: { Test },
-  data () {
+  name: 'JsonForm',
+  components: { FormContent, OptionsTree },
+  setup() {
+    const jsonFormDataModel = new JsonFormDataModel({
+      formData: JSON
+    })
+    provide('jsonFormDataModel', jsonFormDataModel)
+
     return {
-      JSON,
+      JSON: jsonFormDataModel.formData,
+      form: jsonFormDataModel.form
     }
-  },
+  }
 })
 </script>
 
-<style lang='less' scoped>
-
+<style lang='less'>
+@import "./style";
 </style>
