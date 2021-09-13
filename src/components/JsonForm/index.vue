@@ -8,10 +8,10 @@
 <script lang='ts'>
 import { defineComponent, provide } from 'vue'
 import JSON from '../../../data/dist/formMock.json'
-import FormContent from './Form.tsx'
-import OptionsTree from './OptionsTree.vue'
+import FormContent from './components/Form'
+import OptionsTree from './components/OptionsTree.vue'
 
-import JsonFormDataModel from './data'
+import JsonFormDataModel from './utils/data'
 
 export default defineComponent({
   name: 'JsonForm',

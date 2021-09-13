@@ -2,14 +2,24 @@ const { writeFile } = require('./util/wireFile')
 const _ = require('lodash')
 const baseUint = require('./title')
 
-const baseKey = ['config', 'isLeaf', 'desc', 'title']
+const baseKey = ['config', 'isLeaf', 'desc', 'title', 'originKey']
+
+function getUid() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0
+    const v = c === 'x' ? r : (r & 0x3 | 0x8)
+    return v.toString(16)
+  })
+}
 
 function init(mock) {
   const allKey = Object.keys(mock)
   const map = {}
+  const defaultValue = {}
 
-  const getItemValue = (source) => {
+  const getItemValue = (source, originKey) => {
     const data = {}
+    data.originKey = originKey
     data.desc = source.desc
     data.config = {}
     data.isLeaf = true
@@ -25,20 +35,27 @@ function init(mock) {
     return data
   }
 
+  const getDefaultValue = (source) => {
+    const config = source.uiControl || {}
+    const type = config.type
+    if (config.default) return config.default
+    return undefined
+  }
+
   allKey.forEach(key => {
     if (key.includes('.')) {
       const list = key.split('.')
-      _.set(map, list, getItemValue(mock[key]))
+      _.set(map, list, getItemValue(mock[key], key))
+      // _.set(defaultValue, list, getDefaultValue(mock[key]))
       return
     }
-    map[key] = getItemValue(mock[key])
+    map[key] = getItemValue(mock[key], key)
+    // defaultValue[key] = getDefaultValue(mock[key])
   })
   writeFile('mock.json', JSON.stringify(map))
+  // writeFile('default.json', JSON.stringify(defaultValue))
   formatData(map)
 }
-
-// init(a)
-init(baseUint)
 
 function formatData(objValue) {
   const res = []
@@ -54,14 +71,25 @@ function formatData(objValue) {
     }
     console.log(childrenKey)
     childrenKey.forEach(key => {
-      resObj.children.push(Object.assign({}, deepGetItem(obj[key]), { title: key }))
+      resObj.children.push(Object.assign({},
+        deepGetItem(obj[key]),
+        { title: key },
+        { id: getUid() }
+      ))
     })
 
     return resObj
   }
 
   Object.keys(objValue).forEach(key => {
-    res.push(Object.assign({}, deepGetItem(objValue[key]), { title: key }))
+    res.push(Object.assign({},
+      deepGetItem(objValue[key]),
+      { title: key },
+      { id: getUid() }
+    ))
   })
   writeFile('formMock.json', JSON.stringify(res))
 }
+
+// init(a)
+init(baseUint)
