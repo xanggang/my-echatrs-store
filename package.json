@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/echarts": "^4.9.10",
+    "@types/lodash": "^4.14.172",
     "@vitejs/plugin-vue-jsx": "^1.1.8",
     "@vueuse/head": "~0.6",
     "ant-design-vue": "^2.2.6",
@@ -39,7 +40,7 @@
     "@vuedx/typecheck": "~0.7",
     "@vuedx/typescript-plugin-vue": "~0.7",
     "autoprefixer": "~10.3",
-    "cypress": "~8.1",
+    "cypress": "~8.4",
     "eslint": "~7",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-vue": "~7",
