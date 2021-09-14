@@ -1,18 +1,24 @@
 <template>
   <div class='main-container'>
     <div class='left'>
-      <Form></Form>
+      <Form @changeData='handleChange'></Form>
     </div>
     <div class='right'>
-      <Echarts title='121212'/>
+      <Echarts :option='titleOption'/>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue'
 // import Echarts from '../components/Echarts.vue'
 import Echarts from '@/components/Echarts.vue'
-
 import Form from '../components/JsonForm/index.vue'
+
+const titleOption = ref<any>({})
+
+const handleChange = (option) => {
+  titleOption.value = option.value
+}
 </script>
 
 <style lang='less' scoped>

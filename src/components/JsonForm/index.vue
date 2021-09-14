@@ -1,29 +1,33 @@
 <template>
   <div class='jf-container'>
     <OptionsTree />
-    <FormContent :data="JSON" v-model='form'></FormContent>
+    <div class='jf-form-wrap'>
+      {{  form }}
+    </div>
+
   </div>
 </template>
 
 <script lang='ts'>
-import { defineComponent, provide } from 'vue'
-import JSON from '../../../data/dist/formMock.json'
-import FormContent from './components/Form'
+import { defineComponent, provide, watch, isRef } from 'vue'
 import OptionsTree from './components/OptionsTree.vue'
 
 import JsonFormDataModel from './utils/data'
 
 export default defineComponent({
   name: 'JsonForm',
-  components: { FormContent, OptionsTree },
-  setup() {
-    const jsonFormDataModel = new JsonFormDataModel({
-      formData: JSON
-    })
+  components: { OptionsTree },
+  setup(props, { emit }) {
+    const jsonFormDataModel = new JsonFormDataModel()
     provide('jsonFormDataModel', jsonFormDataModel)
 
+    watch(jsonFormDataModel.form, () => {
+      emit('changeData', jsonFormDataModel.form)
+    }, {
+      deep: true
+    })
     return {
-      JSON: jsonFormDataModel.formData,
+      JSONData: jsonFormDataModel.formData || [],
       form: jsonFormDataModel.form
     }
   }

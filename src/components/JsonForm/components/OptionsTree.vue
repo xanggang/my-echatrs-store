@@ -6,14 +6,14 @@
     >
       <template #title="data">
         <div>
-<!--          <RenderFormItem :data='data.dataRef'/>-->
-          <a-popover :title="data.title" trigger="hover">
-            <template #content>
-              <p>{{ data.title }}</p>
-              <p v-html='data.desc'></p>
-            </template>
-            <RenderFormItem :data='data.dataRef'/>
-          </a-popover>
+          <RenderFormItem :data='data.dataRef'/>
+<!--          <a-popover :title="data.title" trigger="hover">-->
+<!--            <template #content>-->
+<!--              <p>{{ data.title }}</p>-->
+<!--              <p v-html='data.desc'></p>-->
+<!--            </template>-->
+<!--            <RenderFormItem :data='data.dataRef'/>-->
+<!--          </a-popover>-->
         </div>
       </template>
     </a-tree>

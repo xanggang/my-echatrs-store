@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import titleConfig from '../../data/title.ts'
+import * as _ from 'lodash'
+// import titleConfig from '../../data/title.ts'
 
 const baseKey = ['config', 'isLeaf', 'desc', 'title', 'originKey']
 
@@ -24,7 +24,6 @@ function objectToTreeList(objValue: any) {
     const resObj: any = {
       children: []
     }
-    console.log(childrenKey)
     childrenKey.forEach(key => {
       resObj.children.push(Object.assign({},
         deepGetItem(obj[key]),
@@ -43,6 +42,8 @@ function objectToTreeList(objValue: any) {
       { id: getUid() }
     ))
   })
+
+  return res
 }
 
 function init(mock: any) {
@@ -93,6 +94,6 @@ function init(mock: any) {
 
 // init(a)
 
-export default function getFormData() {
+export default function getFormData(titleConfig: any) {
   return init(titleConfig)
 }

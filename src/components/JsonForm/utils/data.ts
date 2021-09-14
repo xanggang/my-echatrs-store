@@ -1,4 +1,7 @@
 import { ref, Ref, onMounted, watch, isRef, isReactive, isProxy } from 'vue'
+import * as _ from 'lodash'
+import formatEchartOption from '../../../util/formatEchartOption'
+import titlecConfig from '../../../../data/titlets'
 
 export type IFormType = 'number' | 'color' | 'enum' | 'text' | 'boolean' | 'vector' | 'percent'
 
@@ -36,52 +39,36 @@ class JsonFormDataModel {
   selectedKeys: Ref<string[]> = ref([])
   // 操作的表单
   form: Ref<AnyObject> = ref({})
+  // 默认值
+  defaultValue: AnyObject = {}
   //
   currentShowFormOptions: Ref<IFormItem[]> = ref([])
 
   selectItem: Ref<IFormItem | null> = ref(null)
 
-  constructor(options: IOptions) {
-    this.formData = ref(options.formData)
-    this.getModelValue()
-    this.addWatch()
+  constructor() {
+    const { formatData, defaultValue } = formatEchartOption(titlecConfig)
+    this.formData = ref(formatData)
+    this.defaultValue = defaultValue
   }
 
-  addWatch(): void {
-    // watch(this.selectedKeys, (value) => {
-    //   console.log(value)
-    // })
+  handleChangeValue(originKey: string, value: unknown): void {
+    console.log('handleChangeValue', value)
+    const keyList = originKey.split('.')
+    _.set(this.form.value, keyList, value)
   }
 
-  // 从data中拉出来一组默认值
-  getModelValue() {
-    const data = this.formData.value
-    const defaultValue: { [key: string] : unknown} = {}
-
-    const getDefaultValue = (item: any) => {
-      const config = item.config || {}
-      const type = config.type
-      if (config.default) return config.default
-      return undefined
-    }
-
-    data.forEach((item: IFormItem) => {
-      if (!item.originKey) return
-      const key = item.originKey
-      console.log(key)
-      if (key.includes('.')) {
-        const list = key.split('.')
-        _.set(defaultValue, list, getDefaultValue(item))
-        return
-      }
-      defaultValue[key] = getDefaultValue(item)
-    })
-
-    console.log(defaultValue)
-    return defaultValue
+  getItemValue(originKey: string): void {
+    const keyList = originKey.split('.')
+    return _.get(this.form.value, keyList)
   }
 
-  handleSelectItem(item: IFormItem) {
+  handleRemoveKey(originKey: string): void {
+    const keyList = originKey.split('.')
+    _.unset(this.form.value, keyList)
+  }
+
+  handleSelectItem(item: IFormItem): void {
     this.selectItem.value = item
   }
 }

@@ -64,6 +64,7 @@ export default defineComponent({
     }
   },
   render() {
+    console.log(this.data)
     return (
       <div class="jf-form-wrap" ref="container">
         <a-form model={this.form}>

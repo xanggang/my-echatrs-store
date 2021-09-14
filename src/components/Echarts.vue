@@ -3,11 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, watch } from 'vue'
 import * as echarts from 'echarts'
 
 const props = defineProps<{
-  title?: string
+  title?: string,
+  option?: any
 }>()
 
 const dom = ref<HTMLDivElement | null>(null)
@@ -34,6 +35,25 @@ onMounted(() => {
     }]
   }
 
+  myChart.setOption(option)
+})
+
+watch(props, () => {
+  console.log('-----')
+  const option = {
+    title: props.option,
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      data: [150, 230, 224, 218, 135, 147, 260],
+      type: 'line'
+    }]
+  }
   myChart.setOption(option)
 })
 </script>
