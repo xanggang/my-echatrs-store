@@ -6,7 +6,7 @@
     >
       <template #title="data">
         <div>
-          <RenderFormItem :data='data.dataRef'/>
+          <RenderFormItem :data='data.dataRef' :isSelect='isSelect(data)'/>
 <!--          <a-popover :title="data.title" trigger="hover">-->
 <!--            <template #content>-->
 <!--              <p>{{ data.title }}</p>-->
@@ -21,7 +21,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, ref, reactive, inject } from 'vue'
+import { defineComponent, ref, reactive, inject, computed } from 'vue'
 import JsonFormDataModel from '../utils/data'
 import RenderFormItem from './RenderFormItem'
 
@@ -30,10 +30,13 @@ export default defineComponent({
   components: { RenderFormItem },
   setup() {
     const jsonFormDataModel = inject('jsonFormDataModel') as JsonFormDataModel
-
+    const isSelect = (data: any) => {
+      return jsonFormDataModel.selectItem.value?.id === data.id
+    }
     return {
       treeData: jsonFormDataModel.formData,
-      selectedKeys: jsonFormDataModel.selectedKeys
+      selectedKeys: jsonFormDataModel.selectedKeys,
+      isSelect: isSelect
     }
   }
 })

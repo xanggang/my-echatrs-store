@@ -1,4 +1,4 @@
-import { defineComponent, PropType, inject, computed } from 'vue'
+import { defineComponent, PropType, inject, computed, watch } from 'vue'
 import JsonFormDataModel, { IFormItem } from '../utils/data'
 import { InputNumber } from 'ant-design-vue'
 
@@ -12,13 +12,19 @@ export default defineComponent({
     data: {
       type: Object as PropType<IFormItem>,
       default: () => ({})
+    },
+    isSelect: {
+      type: Boolean
     }
   },
   setup(props) {
     const jsonFormDataModel = inject('jsonFormDataModel') as JsonFormDataModel
 
     const originKey = computed(() => props.data.originKey)
-    const formValue = computed(() => jsonFormDataModel.getItemValue(props.data.originKey))
+    const formValue = computed(() => {
+      if (!props?.data?.originKey) return ''
+      return jsonFormDataModel.getItemValue(props.data.originKey)
+    })
     const defaultValue = computed(() => props.data.config.default)
 
     function renderString() {
@@ -31,7 +37,6 @@ export default defineComponent({
         }
         jsonFormDataModel.handleChangeValue(originKey.value, newValue)
       }
-      console.log(value)
       const props = {
         value,
         placeholder: value,
@@ -47,10 +52,6 @@ export default defineComponent({
       const formValue = jsonFormDataModel.getItemValue(originKey)
       const value = formValue === undefined ? defaultValue : formValue
       const onChange = (newValue: boolean) => {
-        if (newValue === defaultValue) {
-          jsonFormDataModel.handleRemoveKey(originKey)
-          return
-        }
         jsonFormDataModel.handleChangeValue(originKey, newValue)
       }
       return (
@@ -142,25 +143,22 @@ export default defineComponent({
       const originKey = props.data.originKey
       const defaultValue = props.data?.config?.default
       const formValue = jsonFormDataModel.getItemValue(originKey)
-      const value = formValue === undefined ? defaultValue : formValue
+      const value = [undefined, ''].includes(formValue) ? defaultValue : formValue
       return <span class='js-tree-title-default-value'>{ value }</span>
     }
     function handleSelectItem() {
       jsonFormDataModel.handleSelectItem(props.data)
     }
 
-    const isSelect = computed(() => {
-      return jsonFormDataModel.selectItem.value?.id === props.data.id
-    })
-
     return {
       renderItem,
       renderDefaultValue,
       handleSelectItem,
-      isSelect
+      // isSelect
     }
   },
   render() {
+    console.log('render')
     return (
       <div class='js-tree-item' onClick={this.handleSelectItem}>
         <span class='js-tree-title-main' >{ this.data.title }</span>

@@ -1,7 +1,13 @@
 <template>
   <div class='main-container'>
     <div class='left'>
-      <Form @changeData='handleChange'></Form>
+      <div class='jf-container'>
+        <Form @changeData='handleChange'></Form>
+        <div class='jf-form-wrap'>
+          <ShowJson :jsonData='showJson'/>
+        </div>
+      </div>
+
     </div>
     <div class='right'>
       <Echarts :option='titleOption'/>
@@ -9,20 +15,21 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-// import Echarts from '../components/Echarts.vue'
+import { ref, reactive } from 'vue'
 import Echarts from '@/components/Echarts.vue'
 import Form from '../components/JsonForm/index.vue'
+import ShowJson from '../components/showJson/index.vue'
 
 const titleOption = ref<any>({})
+const showJson = ref<any>(null)
 
 const handleChange = (option) => {
-  titleOption.value = option.value
+  titleOption.value = option
+  showJson.value = JSON.stringify(option, null, 2)
 }
 </script>
 
 <style lang='less' scoped>
-
 .main-container {
   width: 100vw;
   height: 100vh;
@@ -47,4 +54,8 @@ const handleChange = (option) => {
     background: #fff;
   }
 }
+</style>
+
+<style lang='less'>
+@import "../components/JsonForm/style";
 </style>

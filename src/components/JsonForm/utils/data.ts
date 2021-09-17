@@ -1,4 +1,4 @@
-import { ref, Ref, onMounted, watch, isRef, isReactive, isProxy } from 'vue'
+import { ref, Ref, onMounted, watch, isRef, isReactive, isProxy, nextTick } from 'vue'
 import * as _ from 'lodash'
 import formatEchartOption from '../../../util/formatEchartOption'
 import titlecConfig from '../../../../data/titlets'
@@ -53,12 +53,11 @@ class JsonFormDataModel {
   }
 
   handleChangeValue(originKey: string, value: unknown): void {
-    console.log('handleChangeValue', value)
     const keyList = originKey.split('.')
     _.set(this.form.value, keyList, value)
   }
 
-  getItemValue(originKey: string): void {
+  getItemValue(originKey: string): string | undefined {
     const keyList = originKey.split('.')
     return _.get(this.form.value, keyList)
   }
