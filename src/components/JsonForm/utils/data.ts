@@ -46,8 +46,8 @@ class JsonFormDataModel {
 
   selectItem: Ref<IFormItem | null> = ref(null)
 
-  constructor() {
-    const { formatData, defaultValue } = formatEchartOption(titlecConfig)
+  constructor(config: any) {
+    const { formatData, defaultValue } = formatEchartOption(config)
     this.formData = ref(formatData)
     this.defaultValue = defaultValue
   }

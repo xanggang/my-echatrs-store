@@ -11,8 +11,16 @@ import JsonFormDataModel from './utils/data'
 export default defineComponent({
   name: 'JsonForm',
   components: { OptionsTree },
+  props: {
+    config: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   setup(props, { emit }) {
-    const jsonFormDataModel = new JsonFormDataModel()
+    const jsonFormDataModel = new JsonFormDataModel(props.config)
     provide('jsonFormDataModel', jsonFormDataModel)
 
     watch(jsonFormDataModel.form, () => {

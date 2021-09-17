@@ -14,19 +14,40 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { ref, reactive } from 'vue'
+<script lang="ts">
+import { defineComponent, ref, reactive, onMounted } from 'vue'
 import Echarts from '@/components/Echarts.vue'
 import Form from '../components/JsonForm/index.vue'
 import ShowJson from '../components/showJson/index.vue'
+import { getGlobal } from '../../data/originData/index'
 
-const titleOption = ref<any>({})
-const showJson = ref<any>(null)
+export default defineComponent({
+  name: 'mianIndex',
+  components: { Echarts, Form, ShowJson },
+  setup() {
+    const titleOption = ref<any>({})
+    const showJson = ref<any>(null)
 
-const handleChange = (option) => {
-  titleOption.value = option
-  showJson.value = JSON.stringify(option, null, 2)
-}
+    const handleChange = (option: any) => {
+      titleOption.value = option
+      showJson.value = JSON.stringify(option, null, 2)
+    }
+
+    onMounted(async() => {
+      const res = await getGlobal()
+      console.log(res)
+
+      console.log(res.angleAxis)
+    })
+
+    return {
+      titleOption,
+      showJson,
+      handleChange
+    }
+  }
+})
+
 </script>
 
 <style lang='less' scoped>
